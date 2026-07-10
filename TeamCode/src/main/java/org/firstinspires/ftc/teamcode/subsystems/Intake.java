@@ -19,8 +19,8 @@ public class Intake implements Mechanism {
         intakeState = IntakeState.OFF;
         power = OFF_SPEED;
     }
-    NextMotor intakeMotor = new NextMotor(RobotController.controlHub(), 2);
-    NextServo intakeServo = new NextServo(RobotController.controlHub(), 4, 0.1);
+    NextMotor intakeMotor = new NextMotor("intakeMotor");
+    NextServo intakeServo = new NextServo("intakeLiftServo");
     private IntakeState intakeState;
     public enum IntakeState {
         FORWARD,
