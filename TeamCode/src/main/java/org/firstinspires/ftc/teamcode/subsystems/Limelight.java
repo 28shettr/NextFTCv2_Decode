@@ -1,7 +1,8 @@
-/*
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import static dev.nextftc.units.Units.Inches;
+
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import org.firstinspires.ftc.teamcode.Robot;
 import dev.nextftc.control.geometry.Pose2d;
@@ -14,25 +15,25 @@ public class Limelight implements Mechanism {
 
     private boolean instantReset;
 
+    private Follower f;
+
+
     private Limelight(){
         this.instantReset = false;
 
     }
 
     private Pose toPedroPose(Pose2d p) {
-        double x = p.position.x.into(Inches);
-        double y = p.position.y.into(Inches);
-        double headingRad = p.heading.log();
-
-        return new Pose(x, y, headingRad);
+        return new Pose(p.position.x.into(Inches), p.position.y.into(Inches), p.heading.log());
     }
     public void relocalize(){
         if (instantReset){
             instantReset = false;
 
             Pose2d p = limelight.getPedroPose();
+
             if (p != null) {
-                Robot.follower.setPose(toPedroPose(p));
+                f.setPose(toPedroPose(p));
             }
 
         }
@@ -41,4 +42,3 @@ public class Limelight implements Mechanism {
 
 
 }
-*/

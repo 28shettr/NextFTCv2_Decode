@@ -4,20 +4,23 @@ import static com.pedropathing.ivy.commands.Commands.instant;
 
 import com.pedropathing.ivy.Command;
 
-import org.firstinspires.ftc.ftccommon.external.OnCreateEventLoop;
+import org.opencv.core.Mat;
 
+import dev.frozenmilk.util.units.angle.Angles;
 import dev.nextftc.hardware.RobotController;
 import dev.nextftc.hardware.actuators.NextMotor;
+import dev.nextftc.hardware.actuators.NextServo;
 import dev.nextftc.robot.Mechanism;
+import dev.nextftc.units.measuretypes.Angle;
 
 public class Intake implements Mechanism {
 
     public Intake() {
         intakeState = IntakeState.OFF;
-        power = off;
+        power = OFF_SPEED;
     }
-    NextMotor i = new NextMotor(RobotController.controlHub(), 2);
-
+    NextMotor intakeMotor = new NextMotor(RobotController.controlHub(), 2);
+    NextServo intakeServo = new NextServo(RobotController.controlHub(), 4, 0.1);
     private IntakeState intakeState;
     public enum IntakeState {
         FORWARD,
@@ -27,9 +30,12 @@ public class Intake implements Mechanism {
 
     private double power;
 
-    private final double forward = 1.0;
-    private final double reverse = -1.0;
-    private final double off = 0.0;
+    private final double FORWARD_SPEED = 1.0;
+    private final double REVERSE_SPEED = -1.0;
+    private final double OFF_SPEED = 0.0;
+
+    private final double LIFT_POS = 0.19;
+    private final double INTAKE_POS = 0.38;
 
     private void setState(IntakeState intakeState) {
         this.intakeState = intakeState;
@@ -40,22 +46,25 @@ public class Intake implements Mechanism {
     }
 
     public void cycle() {
-        if (intakeState == IntakeState.REVERSE) power = forward;
-        else if (intakeState == IntakeState.FORWARD) power = reverse;
-        else power = forward;
+        if (intakeState == IntakeState.REVERSE) power = FORWARD_SPEED;
+        else if (intakeState == IntakeState.FORWARD) power = REVERSE_SPEED;
+        else power = FORWARD_SPEED;
     }
 
     @Override
     public void periodic() {
         switch (intakeState) {
             case FORWARD:
-                i.setThrottle(forward);
+                intakeMotor.setThrottle(FORWARD_SPEED);
+                intakeServo.setPosition(INTAKE_POS);
                 break;
             case REVERSE:
-                i.setThrottle(reverse);
+                intakeMotor.setThrottle(REVERSE_SPEED);
+                intakeServo.setPosition(LIFT_POS);
                 break;
             case OFF:
-                i.setThrottle(off);
+                intakeMotor.setThrottle(OFF_SPEED);
+                intakeServo.setPosition(LIFT_POS);
                 break;
         };
     }

@@ -10,9 +10,13 @@ import dev.nextftc.robot.Mechanism;
 import dev.nextftc.robot.NextRobot;
 
 public class Robot implements NextRobot {
-//    public static Follower follower;
+    private Follower follower;
+
     public final Intake i = new Intake();
 
+    public void setFollower(Follower follower) {
+        this.follower = follower;
+    }
 
     @Override
     public Set<Mechanism> getMechanisms() {

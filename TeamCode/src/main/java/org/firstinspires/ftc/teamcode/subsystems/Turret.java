@@ -1,6 +1,6 @@
-/*
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.Robot;
@@ -14,6 +14,8 @@ import dev.nextftc.robot.Mechanism;
 public class Turret implements Mechanism {
 
     private Turret(){}
+
+    private Follower f;
 
     public static double distance;
 
@@ -69,7 +71,7 @@ public class Turret implements Mechanism {
         targetTurretAng = x;
     }
     public void turretLoop() {
-        Pose currentPose = Robot.follower.getPose();
+        Pose currentPose = f.getPose();
 
         double dx = goal.getX() - currentPose.getX();
         double dy = goal.getY() - currentPose.getY();
@@ -83,7 +85,7 @@ public class Turret implements Mechanism {
     }
 
     private void distanceCalc(){
-        Pose pose = Robot.follower.getPose();
+        Pose pose = f.getPose();
         distance = Math.hypot(exactGoal.getX() - pose.getX(), exactGoal.getY() - pose.getY()) / 12;
     }
 
@@ -106,4 +108,3 @@ public class Turret implements Mechanism {
 
 
 }
-*/
