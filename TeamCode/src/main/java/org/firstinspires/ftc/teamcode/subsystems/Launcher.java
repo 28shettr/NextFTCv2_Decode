@@ -1,26 +1,19 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import dev.nextftc.control.feedback.PIDCoefficients;
-import dev.nextftc.control.feedback.PIDController;
-import dev.nextftc.control.feedforward.SimpleFeedforward;
+import static dev.nextftc.units.Units.DegreesPerSecond;
+
 import dev.nextftc.hardware.RobotController;
 import dev.nextftc.hardware.actuators.NextMotor;
 import dev.nextftc.hardware.actuators.NextRGBIndicator;
 import dev.nextftc.robot.Mechanism;
+import dev.nextftc.units.measuretypes.AngularVelocity;
 
 public class Launcher implements Mechanism {
-    private Launcher(){
-        leftLauncher.setThrottle(0);
-        rightLauncher.follow(leftLauncher, NextMotor.Direction.REVERSE);
-
-        launcherState = LauncherState.IDLE;
-        this.veloGoal = 0;
-    }
 
     NextMotor leftLauncher = new NextMotor(RobotController.controlHub(), 2);
     NextMotor rightLauncher = new NextMotor(RobotController.controlHub(), 1);
 
-    NextRGBIndicator rgb = new NextRGBIndicator("rgb1",0.01);
+    NextRGBIndicator rgb = new NextRGBIndicator("rgb1", 0.01);
 
     private LauncherState launcherState;
     public enum LauncherState {
@@ -29,37 +22,53 @@ public class Launcher implements Mechanism {
         READY
     }
 
-    private double veloGoal;
-    PIDCoefficients pid = new PIDCoefficients(0.0009, 0, 0);
-    PIDController launcherPID = new PIDController(pid);
-    SimpleFeedforward basicFF = new SimpleFeedforward(0.000423, 0, 0.067);
+    private static final double IDLE_VELOCITY = 1000;
+    private static final double VELO_TOLERANCE = 40;
 
-    public void setGoal(double goal){
-        veloGoal = 0;
+    private AngularVelocity veloGoal;
+
+    public Launcher() {
+        leftLauncher.getVelocityConstants().setKP(0.0009);
+        leftLauncher.getVelocityConstants().setKI(0.0);
+        leftLauncher.getVelocityConstants().setKD(0.0);
+        leftLauncher.getVelocityConstants().setKS(0.000423);
+        leftLauncher.getVelocityConstants().setKV(0.0);
+        leftLauncher.getVelocityConstants().setKA(0.067);
+
+        rightLauncher.follow(leftLauncher, NextMotor.Direction.REVERSE);
+
+        launcherState = LauncherState.IDLE;
+        veloGoal = DegreesPerSecond.of(IDLE_VELOCITY);
+        leftLauncher.setVelocitySetpoint(veloGoal);
+    }
+
+    public void setGoal(double goal) {
+        veloGoal = DegreesPerSecond.of(goal);
+        leftLauncher.setVelocitySetpoint(veloGoal);
+        launcherState = LauncherState.SPINUP;
     }
 
     @Override
-    public void periodic(){
-        if (launcherState == LauncherState.IDLE){
-            setGoal(1000);
+    public void periodic() {
+        if (launcherState == LauncherState.IDLE) {
+            leftLauncher.setVelocitySetpoint(DegreesPerSecond.of(IDLE_VELOCITY));
         }
 
-        double veloPID = launcherPID.calculateFromReference(veloGoal, leftLauncher.getEncoderVelocity().getMagnitude());
-        double veloFF = basicFF.calculate(veloGoal);
-
-        leftLauncher.setThrottle(veloPID + veloFF);
+        double error = Math.abs(
+                leftLauncher.getEncoderVelocity().getMagnitude() - veloGoal.getMagnitude()
+        );
 
         if (launcherState != LauncherState.IDLE) {
-            launcherState = (Math.abs(leftLauncher.getEncoderVelocity().getMagnitude() - veloGoal ) <= 40)
+            launcherState = (error <= VELO_TOLERANCE)
                     ? LauncherState.READY
                     : LauncherState.SPINUP;
         }
 
-        if (launcherState == LauncherState.IDLE){
+        if (launcherState == LauncherState.IDLE) {
             rgb.setColor(NextRGBIndicator.Color.WHITE);
-        } else if (launcherState == LauncherState.READY){
+        } else if (launcherState == LauncherState.READY) {
             rgb.setColor(NextRGBIndicator.Color.VIOLET);
-        } else if (launcherState == LauncherState.SPINUP){
+        } else {
             rgb.setColor(NextRGBIndicator.Color.AZURE);
         }
     }

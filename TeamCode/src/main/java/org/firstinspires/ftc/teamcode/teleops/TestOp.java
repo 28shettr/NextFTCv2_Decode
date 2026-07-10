@@ -18,7 +18,7 @@ public class TestOp extends NextOpMode {
 
         CommandGamepad gp1 = new CommandGamepad(Trigger.Companion.getDefaultEventLoop(), gamepad1);
         gp1.cross().onTrue(r.i.setSpeed(Intake.IntakeState.FORWARD));
-        gp1.circle().onTrue(r.i.setSpeed(Intake.IntakeState.FORWARD));
+        gp1.circle().onTrue(r.i.setSpeed(Intake.IntakeState.OFF));
     }
 
 

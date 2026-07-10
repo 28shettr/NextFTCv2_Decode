@@ -31,7 +31,7 @@ dependencies {
     implementation("dev.frozenmilk.dairy:Core:2.2.4")
 
     //NextFTC
-    implementation 'dev.nextftc.v2:robot:0.0.2-SNAPSHOT'
+    implementation 'dev.nextftc.v2:robot:0.1.0-rc.1-SNAPSHOT'
 //    implementation 'dev.nextftc:bindings:1.0.1'
 
     //Pedro
