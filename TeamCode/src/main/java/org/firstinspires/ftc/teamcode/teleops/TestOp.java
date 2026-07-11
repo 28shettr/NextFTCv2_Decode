@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
+import static com.pedropathing.ivy.commands.Commands.instant;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Robot;
@@ -21,8 +23,17 @@ public class TestOp extends NextOpMode {
 
     @Override
     public void onInit() {
+        r.s.init();
         CommandGamepad gp1 = new CommandGamepad(Trigger.Companion.getDefaultEventLoop(), gamepad1);
-        gp1.cross().onTrue(r.i.setSpeed(Intake.IntakeState.FORWARD));
-        gp1.circle().onTrue(r.i.setSpeed(Intake.IntakeState.OFF));
+        gp1.rightBumper().onTrue(r.i.setSpeed(Intake.IntakeState.FORWARD));
+        gp1.leftBumper().onTrue(r.i.setSpeed(Intake.IntakeState.OFF));
+
+        gp1.cross().onTrue(r.s.nextChamber());
+    }
+
+    @Override
+    public void periodic() {
+        telemetry.addData("Spindexer Position", r.s.spindexerMotor.getEncoderPosition());
+        telemetry.update();
     }
 }

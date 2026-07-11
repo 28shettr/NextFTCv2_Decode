@@ -10,7 +10,7 @@ import dev.nextftc.hardware.sensors.colors.NextColor;
 import dev.nextftc.robot.Mechanism;
 
 public class SpindexerSensors implements Mechanism {
-    private SpindexerSensors() {
+    public SpindexerSensors() {
         intakeChamber.setGain(4.0f);
         storageChamber.setGain(4.0f);
         launcherChamber.setGain(4.0f);
