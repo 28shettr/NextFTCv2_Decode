@@ -26,12 +26,12 @@ public class Spindexer implements Mechanism {
     private static final double LAUNCHER_GATE_OPEN_POSITION = 1.0;
     private static final double LAUNCHER_GATE_CLOSE_POSITION = 0.49; //0.16
 
-    private static final double kP = 0;
+    private static final double kP = 0.004;
     private static final double kI = 0;
-    private static final double kD = 0;
+    private static final double kD = 0.000085;
     private static final double kV = 0;
     private static final double kA = 0;
-    private static final double kS = 0;
+    private static final double kS = 0.0001;
 
     public NextMotor spindexerMotor = new NextMotor("spindexerMotor", Rotations.of(-1.0 / 8192.0));
     public NextServo leftTriggerServo = new NextServo("leftTriggerServo");
