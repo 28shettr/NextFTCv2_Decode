@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.intakeSpindex;
 
 import static com.pedropathing.ivy.commands.Commands.instant;
 
@@ -17,7 +17,7 @@ public class Intake implements Mechanism {
     }
     NextMotor intakeMotor = new NextMotor("intakeMotor");
     NextServo intakeServo = new NextServo("intakeLiftServo");
-    private IntakeState intakeState;
+    public IntakeState intakeState;
     public enum IntakeState {
         FORWARD,
         REVERSE,

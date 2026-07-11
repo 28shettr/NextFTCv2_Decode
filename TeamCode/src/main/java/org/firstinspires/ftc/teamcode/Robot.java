@@ -2,8 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.pedropathing.follower.Follower;
 
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Spindexer;
+import org.firstinspires.ftc.teamcode.subsystems.intakeSpindex.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.intakeSpindex.Spindexer;
+import org.firstinspires.ftc.teamcode.subsystems.intakeSpindex.SpindexerSensors;
 
 import java.util.Set;
 
@@ -12,7 +13,7 @@ import dev.nextftc.robot.NextRobot;
 
 public class Robot implements NextRobot {
     private Follower follower;
-//    private SpindexerSensors ss = new SpindexerSensors();
+    public final SpindexerSensors ss = new SpindexerSensors();
     public final Intake i = new Intake();
     public final Spindexer s = new Spindexer();
 
@@ -22,10 +23,7 @@ public class Robot implements NextRobot {
 
     @Override
     public Set<Mechanism> getMechanisms() {
-        return Set.of(i,s);
+        return Set.of(i, s);
     }
-
-   /* public void setFollower(Follower follower){
-        Robot.follower = follower;
-    }*/
 }
+

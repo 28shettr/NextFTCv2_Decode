@@ -1,5 +1,4 @@
-/*
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.intakeSpindex;
 
 import dev.nextftc.hardware.actuators.NextRGBIndicator;
 import dev.nextftc.hardware.sensors.NextColorDistanceSensor;
@@ -127,4 +126,3 @@ public class SpindexerSensors implements Mechanism {
         }
     }
 }
-*/

@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
-import static com.pedropathing.ivy.commands.Commands.instant;
-
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.intakeSpindex.Intake;
 
 import dev.nextftc.robot.opmode.NextOpMode;
 import dev.nextftc.robot.opmode.NextTeleop;
