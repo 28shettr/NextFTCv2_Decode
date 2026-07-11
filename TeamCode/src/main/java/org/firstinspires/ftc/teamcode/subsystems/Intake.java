@@ -4,14 +4,13 @@ import static com.pedropathing.ivy.commands.Commands.instant;
 
 import com.pedropathing.ivy.Command;
 
-import org.opencv.core.Mat;
 
-import dev.frozenmilk.util.units.angle.Angles;
+import org.firstinspires.ftc.teamcode.Robot;
+
 import dev.nextftc.hardware.RobotController;
 import dev.nextftc.hardware.actuators.NextMotor;
 import dev.nextftc.hardware.actuators.NextServo;
 import dev.nextftc.robot.Mechanism;
-import dev.nextftc.units.measuretypes.Angle;
 
 public class Intake implements Mechanism {
 
@@ -19,8 +18,8 @@ public class Intake implements Mechanism {
         intakeState = IntakeState.OFF;
         power = OFF_SPEED;
     }
-    NextMotor intakeMotor = new NextMotor("intakeMotor");
-    NextServo intakeServo = new NextServo("intakeLiftServo");
+    NextMotor intakeMotor = new NextMotor(RobotController.controlHub(), 2);
+    NextServo intakeServo = new NextServo(RobotController.controlHub(), 4);
     private IntakeState intakeState;
     public enum IntakeState {
         FORWARD,

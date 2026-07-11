@@ -27,8 +27,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     //Sloth + Panels
-    implementation("com.bylazar.sloth:fullpanels:0.2.4+1.0.12")
-    implementation("dev.frozenmilk.dairy:Core:2.2.4")
+//    implementation("com.bylazar.sloth:fullpanels:0.2.4+1.0.12")
+    implementation("dev.frozenmilk.sinister:Sloth:0.2.4")
 
     //NextFTC
     implementation 'dev.nextftc.v2:robot:0.1.0-rc.1-SNAPSHOT'
