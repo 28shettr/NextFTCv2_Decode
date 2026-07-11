@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems.intakeSpindex;
 
-import static com.pedropathing.ivy.commands.Commands.instant;
 import static com.pedropathing.ivy.groups.Groups.parallel;
 
 import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.commands.Commands;
 
 import static dev.nextftc.units.Units.Degrees;
 import static dev.nextftc.units.Units.Rotations;
@@ -73,14 +73,14 @@ public class Spindexer implements Mechanism {
 
     double currentPos;
     public Command spindexerUp() {
-        return instant(() -> {
+        return Commands.instant(() -> {
             double currentPos = spindexerMotor.getEncoderPosition().into(Rotations);
             setPos(currentPos + CALIBRATION_INCREMENT.into(Rotations));
         }).requiring(spindexerMotor);
     }
 
     public Command spindexerDown() {
-        return instant(() -> {
+        return Commands.instant(() -> {
             double currentPos = spindexerMotor.getEncoderPosition().into(Rotations);
             setPos(currentPos - CALIBRATION_INCREMENT.into(Rotations));
         }).requiring(spindexerMotor);
@@ -94,28 +94,28 @@ public class Spindexer implements Mechanism {
     }
 
     public Command nextChamber() {
-        return instant(this::calcNewPos).requiring(spindexerMotor);
+        return Commands.instant(this::calcNewPos).requiring(spindexerMotor);
     }
 
     public Command openLauncherGate(){
-        return instant(()->launcherGateServo.setPosition(LAUNCHER_GATE_OPEN_POSITION)).requiring(launcherGateServo);
+        return Commands.instant(()->launcherGateServo.setPosition(LAUNCHER_GATE_OPEN_POSITION)).requiring(launcherGateServo);
     }
     public Command closeLauncherGate(){
-        return instant(()->launcherGateServo.setPosition(LAUNCHER_GATE_CLOSE_POSITION)).requiring(launcherGateServo);
+        return Commands.instant(()->launcherGateServo.setPosition(LAUNCHER_GATE_CLOSE_POSITION)).requiring(launcherGateServo);
     }
 
     public Command activateRightTrigger(){
-        return instant(()->rightTriggerServo.setPosition(RIGHT_TRIGGER_LAUNCH_POSITION)).requiring(rightTriggerServo);
+        return Commands.instant(()->rightTriggerServo.setPosition(RIGHT_TRIGGER_LAUNCH_POSITION)).requiring(rightTriggerServo);
     }
     public Command resetRightTrigger(){
-        return instant(()->rightTriggerServo.setPosition(RIGHT_TRIGGER_RESET_POSITION)).requiring(rightTriggerServo);
+        return Commands.instant(()->rightTriggerServo.setPosition(RIGHT_TRIGGER_RESET_POSITION)).requiring(rightTriggerServo);
     }
 
     public Command activateLeftTrigger(){
-        return instant(()->rightTriggerServo.setPosition(RIGHT_TRIGGER_LAUNCH_POSITION)).requiring(rightTriggerServo);
+        return Commands.instant(()->rightTriggerServo.setPosition(RIGHT_TRIGGER_LAUNCH_POSITION)).requiring(rightTriggerServo);
     }
     public Command resetLeftTrigger(){
-        return instant(()->rightTriggerServo.setPosition(RIGHT_TRIGGER_RESET_POSITION)).requiring(rightTriggerServo);
+        return Commands.instant(()->rightTriggerServo.setPosition(RIGHT_TRIGGER_RESET_POSITION)).requiring(rightTriggerServo);
     }
 
     public Command launch(){

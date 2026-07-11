@@ -11,7 +11,7 @@ import java.util.Set;
 import dev.nextftc.robot.Mechanism;
 import dev.nextftc.robot.NextRobot;
 
-public class Robot implements NextRobot {
+public class HazmatRobot implements NextRobot {
     private Follower follower;
     public final SpindexerSensors ss = new SpindexerSensors();
     public final Intake intake = new Intake();
