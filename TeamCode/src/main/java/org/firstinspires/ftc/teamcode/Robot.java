@@ -14,8 +14,8 @@ import dev.nextftc.robot.NextRobot;
 public class Robot implements NextRobot {
     private Follower follower;
     public final SpindexerSensors ss = new SpindexerSensors();
-    public final Intake i = new Intake();
-    public final Spindexer s = new Spindexer();
+    public final Intake intake = new Intake();
+    public final Spindexer spindexer = new Spindexer();
 
     public void setFollower(Follower follower) {
         this.follower = follower;
@@ -23,7 +23,7 @@ public class Robot implements NextRobot {
 
     @Override
     public Set<Mechanism> getMechanisms() {
-        return Set.of(i, s);
+        return Set.of(intake, spindexer);
     }
 }
 
