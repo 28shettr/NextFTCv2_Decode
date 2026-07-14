@@ -1,9 +1,8 @@
-/*
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.launcher;
 
+import static dev.nextftc.units.Units.Degrees;
 import static dev.nextftc.units.Units.DegreesPerSecond;
 
-import dev.nextftc.hardware.RobotController;
 import dev.nextftc.hardware.actuators.NextMotor;
 import dev.nextftc.hardware.actuators.NextRGBIndicator;
 import dev.nextftc.robot.Mechanism;
@@ -11,10 +10,12 @@ import dev.nextftc.units.measuretypes.AngularVelocity;
 
 public class Launcher implements Mechanism {
 
-    NextMotor leftLauncher = new NextMotor(RobotController.controlHub(), 2);
-    NextMotor rightLauncher = new NextMotor(RobotController.controlHub(), 1);
+    private static final double TICKS_TO_DEGREES = 360.0 / 28.0;
 
-    NextRGBIndicator rgb = new NextRGBIndicator("rgb1", 0.01);
+    public NextMotor leftLauncher = new NextMotor("leftLauncher", Degrees.of(TICKS_TO_DEGREES));
+    NextMotor rightLauncher = new NextMotor("rightLauncher", Degrees.of(TICKS_TO_DEGREES));
+
+    NextRGBIndicator rgb = new NextRGBIndicator("rgbLight1");
 
     private LauncherState launcherState;
     public enum LauncherState {
@@ -23,44 +24,54 @@ public class Launcher implements Mechanism {
         READY
     }
 
-    private static final double IDLE_VELOCITY = 1000;
-    private static final double VELO_TOLERANCE = 40;
-
-    private AngularVelocity veloGoal;
-
-    public Launcher() {
-        leftLauncher.getVelocityConstants().setKP(0.0009);
-        leftLauncher.getVelocityConstants().setKI(0.0);
-        leftLauncher.getVelocityConstants().setKD(0.0);
-        leftLauncher.getVelocityConstants().setKS(0.000423);
-        leftLauncher.getVelocityConstants().setKV(0.0);
-        leftLauncher.getVelocityConstants().setKA(0.067);
-
-        rightLauncher.follow(leftLauncher, NextMotor.Direction.REVERSE);
-
+    public void setIdle(){
         launcherState = LauncherState.IDLE;
-        veloGoal = DegreesPerSecond.of(IDLE_VELOCITY);
-        leftLauncher.setVelocitySetpoint(veloGoal);
     }
 
-    public void setGoal(double goal) {
-        veloGoal = DegreesPerSecond.of(goal);
-        leftLauncher.setVelocitySetpoint(veloGoal);
+    private static final double IDLE_TPS = 1000 * TICKS_TO_DEGREES;
+    private static final double VELO_TOLERANCE_TPS = 40 * TICKS_TO_DEGREES;
+
+    private AngularVelocity veloGoal;
+    private double current;
+
+    public double getCurrent() {
+        return current;
+    }
+
+    public Launcher() {
+        rightLauncher.getVelocityConstants().setKP(0.0009 / TICKS_TO_DEGREES);
+        rightLauncher.getVelocityConstants().setKV(0.000423 / TICKS_TO_DEGREES);
+        rightLauncher.getVelocityConstants().setKS(0.067);
+
+        leftLauncher.follow(rightLauncher, NextMotor.Direction.REVERSE);
+
+        launcherState = LauncherState.IDLE;
+        veloGoal = DegreesPerSecond.of(IDLE_TPS * TICKS_TO_DEGREES);
+        rightLauncher.setVelocitySetpoint(veloGoal);
+    }
+
+    public String getSpeed() {
+        return "Right launcher velocity" + rightLauncher.getEncoderVelocity() + "Left launcher velocity" + leftLauncher.getEncoderVelocity();
+    }
+
+    public void setGoal(double goalTPS) {
+        veloGoal = DegreesPerSecond.of(goalTPS * TICKS_TO_DEGREES);
+        rightLauncher.setVelocitySetpoint(veloGoal);
         launcherState = LauncherState.SPINUP;
     }
 
     @Override
     public void periodic() {
         if (launcherState == LauncherState.IDLE) {
-            leftLauncher.setVelocitySetpoint(DegreesPerSecond.of(IDLE_VELOCITY));
+            rightLauncher.setVelocitySetpoint(DegreesPerSecond.of(IDLE_TPS));
         }
 
-        double error = Math.abs(
-                leftLauncher.getEncoderVelocity().getMagnitude() - veloGoal.getMagnitude()
-        );
+        current = rightLauncher.getEncoderVelocity().getMagnitude();
+        double error = Math.abs(current - veloGoal.getMagnitude());
+        double toleranceDegPerSec = VELO_TOLERANCE_TPS;
 
         if (launcherState != LauncherState.IDLE) {
-            launcherState = (error <= VELO_TOLERANCE)
+            launcherState = (error <= toleranceDegPerSec)
                     ? LauncherState.READY
                     : LauncherState.SPINUP;
         }
@@ -74,4 +85,3 @@ public class Launcher implements Mechanism {
         }
     }
 }
-*/

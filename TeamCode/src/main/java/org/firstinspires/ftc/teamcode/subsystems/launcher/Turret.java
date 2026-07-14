@@ -1,10 +1,8 @@
-/*
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.launcher;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 
-import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.util.MyMath;
 import org.firstinspires.ftc.teamcode.util.SavedData;
 
@@ -14,14 +12,16 @@ import dev.nextftc.robot.Mechanism;
 
 public class Turret implements Mechanism {
 
-    private Turret(){}
+    public Turret(Follower follower){
+        this.f = follower;
+    }
 
     private Follower f;
 
     public static double distance;
 
-    private final NextServo leftTurretServo = new NextServo(RobotController.controlHub(), 1);
-    private final NextServo rightTurretServo = new NextServo(RobotController.controlHub(), 2);
+    private final NextServo leftTurretServo = new NextServo("leftTurretServo");
+    private final NextServo rightTurretServo = new NextServo("rightTurretServo");
 
 
     public static double targetTurretAng;
@@ -109,4 +109,3 @@ public class Turret implements Mechanism {
 
 
 }
-*/

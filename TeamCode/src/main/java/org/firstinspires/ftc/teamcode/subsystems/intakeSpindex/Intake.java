@@ -5,6 +5,7 @@ import static com.pedropathing.ivy.commands.Commands.instant;
 import com.pedropathing.ivy.Command;
 
 
+import dev.nextftc.hardware.RobotController;
 import dev.nextftc.hardware.actuators.NextMotor;
 import dev.nextftc.hardware.actuators.NextServo;
 import dev.nextftc.robot.Mechanism;
@@ -12,12 +13,11 @@ import dev.nextftc.robot.Mechanism;
 public class Intake implements Mechanism {
 
     public Intake() {
-        intakeState = IntakeState.OFF;
-        power = OFF_SPEED;
+
     }
-    NextMotor intakeMotor = new NextMotor("intakeMotor");
-    NextServo intakeServo = new NextServo("intakeLiftServo");
-    public IntakeState intakeState;
+    NextMotor intakeMotor = new NextMotor(RobotController.controlHub(),2);
+    NextServo intakeServo = new NextServo(RobotController.controlHub(),4);
+    public IntakeState intakeState = IntakeState.OFF;
     public enum IntakeState {
         FORWARD,
         REVERSE,
@@ -33,6 +33,9 @@ public class Intake implements Mechanism {
     private final double LIFT_POS = 0.19;
     private final double INTAKE_POS = 0.38;
 
+    public boolean isIntaking(){
+        return intakeState == IntakeState.FORWARD;
+    }
     private void setState(IntakeState intakeState) {
         this.intakeState = intakeState;
     }
@@ -42,9 +45,9 @@ public class Intake implements Mechanism {
     }
 
     public void cycle() {
-        if (intakeState == IntakeState.REVERSE) power = FORWARD_SPEED;
-        else if (intakeState == IntakeState.FORWARD) power = REVERSE_SPEED;
-        else power = FORWARD_SPEED;
+        if (intakeState == IntakeState.REVERSE) setState(IntakeState.FORWARD);
+        else if (intakeState == IntakeState.FORWARD) setState(IntakeState.REVERSE);
+        else setState(IntakeState.FORWARD); ;
     }
 
     @Override

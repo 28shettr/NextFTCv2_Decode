@@ -1,4 +1,3 @@
-/*
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import static com.pedropathing.ivy.commands.Commands.instant;
@@ -13,8 +12,7 @@ import dev.nextftc.robot.Mechanism;
 
 public class LauncherHood implements Mechanism {
 
-    private LauncherHood(){
-        launcherHoodServo.setPosition(0);
+    public LauncherHood(){
     }
 
     private final NextServo launcherHoodServo = new NextServo(RobotController.expansionHub(), 3);
@@ -23,6 +21,9 @@ public class LauncherHood implements Mechanism {
     public static final double MIN_SERVO_POSITION = 0.0;
 
 
+    public void init(){
+        launcherHoodServo.setPosition(0);
+    }
     private void setPos(double x){
         launcherHoodServo.setPosition(MyMath.clamp(x,MIN_SERVO_POSITION, MAX_SERVO_POSITION ));
     }
@@ -35,4 +36,3 @@ public class LauncherHood implements Mechanism {
         return launcherHoodServo.getPosition();
     }
 }
-*/

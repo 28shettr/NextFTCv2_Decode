@@ -10,4 +10,20 @@ public class MyMath {
         if (ang < -180.0) ang += 360.0;
         return ang;
     }
+
+    public static double launcherMath(double x) {
+        double x2 = x * x;
+        double x3 = x2 * x;
+        double x4 = x3 * x;
+
+        return 0.0658846 * x4
+                - 2.30574 * x3
+                + 28.67283 * x2
+                - 81.70799 * x
+                + 956.74449;
+    }
+
+    public static double launcherHoodMath(double x) {
+        return 0.230219 / (1 + Math.exp(-(-4.7077 * x + 27.63986)));
+    }
 }

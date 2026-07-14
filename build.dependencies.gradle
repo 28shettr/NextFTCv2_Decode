@@ -40,4 +40,7 @@ dependencies {
 
     //Ivy
     implementation 'com.pedropathing:ivy:1.0.0'
+
+    //Zachweaver
+    implementation 'gay.zharel.fateweaver:ftc:0.4.0'
 }

@@ -10,13 +10,12 @@ import dev.nextftc.robot.Mechanism;
 
 public class SpindexerSensors implements Mechanism {
     public SpindexerSensors() {
-        intakeChamber.setGain(4.0f);
-        storageChamber.setGain(4.0f);
-        launcherChamber.setGain(4.0f);
+
     }
 
     private static final double DISTANCE_THRESHOLD_CM = 3.6;
     private static final double STORAGE_DISTANCE_THRESHOLD_CM = 3.0;
+
 
     public enum DetectedColor {
         GREEN, PURPLE, UNKNOWN,
@@ -48,9 +47,14 @@ public class SpindexerSensors implements Mechanism {
     NextColorDistanceSensor intakeChamber = new NextColorDistanceSensor("intakeChamberSensor", true);
     NextColorDistanceSensor storageChamber = new NextColorDistanceSensor("storageChamberSensor", true);
     NextColorDistanceSensor launcherChamber = new NextColorDistanceSensor("launcherChamberSensor", true);
-    NextDigitalSensor beamBreak = new NextDigitalSensor("beamBreak");
-    NextRGBIndicator rgb2 = new NextRGBIndicator("rgb2", 0.01);
+    NextDigitalSensor beamBreak = new NextDigitalSensor("beamBreak",false);
+    NextRGBIndicator rgb2 = new NextRGBIndicator("rgbLight1");
 
+    public void setGains(){
+        intakeChamber.setGain(4.0f);
+        storageChamber.setGain(4.0f);
+        launcherChamber.setGain(4.0f);
+    }
     public boolean beamBreakSensedArtifact() {
         return beamBreakSensedArtifact == SensedArtifact.ARTIFACT;
     }

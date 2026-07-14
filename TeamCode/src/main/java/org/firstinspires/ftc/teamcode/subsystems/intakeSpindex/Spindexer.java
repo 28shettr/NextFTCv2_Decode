@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems.intakeSpindex;
 
+import static com.pedropathing.ivy.commands.Commands.waitMs;
 import static com.pedropathing.ivy.groups.Groups.parallel;
+import static com.pedropathing.ivy.groups.Groups.sequential;
 
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.commands.Commands;
@@ -30,6 +32,7 @@ public class Spindexer implements Mechanism {
     private static final double LAUNCHER_GATE_OPEN_POSITION = 1.0;
     private static final double LAUNCHER_GATE_CLOSE_POSITION = 0.49; //0.16
 
+
     private static final double PID_SCALE = 8192.0 / 10.9;
 
     private static final double kP = 0.004 * PID_SCALE;
@@ -58,12 +61,7 @@ public class Spindexer implements Mechanism {
         spindexerMotor.getPositionConstants().setKA(kA);
         spindexerMotor.getPositionConstants().setKS(kS);
 
-        double currentPos = spindexerMotor.getEncoderPosition().into(Rotations);
-        double chamberDelta = CHAMBER_DELTA.into(Rotations);
-
-        double snappedPos = Math.round(currentPos / chamberDelta + 1) * chamberDelta;
-
-        spindexerMotor.setPositionSetpoint(Rotations.of(snappedPos));
+        calcNewPos(1);
     }
 
     private void setPos(double goal) {
@@ -85,16 +83,19 @@ public class Spindexer implements Mechanism {
             setPos(currentPos - CALIBRATION_INCREMENT.into(Rotations));
         }).requiring(spindexerMotor);
     }
-    public void calcNewPos() {
+    public void calcNewPos(int x) {
         currentPos = spindexerMotor.getEncoderPosition().into(Rotations);
-
-        double snappedPos = (Math.round(currentPos / CHAMBER_DELTA.getMagnitude()) + 1) * CHAMBER_DELTA.getMagnitude();
-
+        double chamberDelta = CHAMBER_DELTA.into(Rotations);
+        double snappedPos = (Math.round(currentPos / chamberDelta) + x) * chamberDelta;
         setPos(snappedPos);
     }
 
     public Command nextChamber() {
-        return Commands.instant(this::calcNewPos).requiring(spindexerMotor);
+        return Commands.instant(()->calcNewPos(1)).requiring(spindexerMotor);
+    }
+
+    public Command spindexLaunch() {
+        return Commands.instant(()->calcNewPos(3)).requiring(spindexerMotor);
     }
 
     public Command openLauncherGate(){
@@ -112,25 +113,40 @@ public class Spindexer implements Mechanism {
     }
 
     public Command activateLeftTrigger(){
-        return Commands.instant(()->rightTriggerServo.setPosition(RIGHT_TRIGGER_LAUNCH_POSITION)).requiring(rightTriggerServo);
+        return Commands.instant(()->leftTriggerServo.setPosition(LEFT_TRIGGER_LAUNCH_POSITION)).requiring(leftTriggerServo);
     }
     public Command resetLeftTrigger(){
-        return Commands.instant(()->rightTriggerServo.setPosition(RIGHT_TRIGGER_RESET_POSITION)).requiring(rightTriggerServo);
+        return Commands.instant(()->leftTriggerServo.setPosition(LEFT_TRIGGER_RESET_POSITION)).requiring(leftTriggerServo);
     }
 
-    public Command launch(){
+    public Command launchTriggers(){
         return parallel(
-                activateRightTrigger(),
-                activateLeftTrigger(),
-                openLauncherGate()
+            activateRightTrigger(),
+            activateLeftTrigger()
         );
     }
 
     public Command reset(){
         return parallel(
-                resetRightTrigger(),
-                resetLeftTrigger(),
-                closeLauncherGate()
+            resetRightTrigger(),
+            resetLeftTrigger(),
+            closeLauncherGate()
+        );
+    }
+
+    Command shotDelay = waitMs(200);
+    Command waitForShot = waitMs(1000);
+
+
+    public Command launchSequence(){
+        return sequential(
+            openLauncherGate(),
+            shotDelay,
+            launchTriggers(),
+//            shotDelay,
+            spindexLaunch(),
+            waitForShot,
+            reset()
         );
     }
 
