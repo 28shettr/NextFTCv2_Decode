@@ -17,8 +17,11 @@ public class Limelight implements Mechanism {
 
     private Follower f;
 
+    public void start(){
+        limelight.startReading(7, 50);
+    }
 
-    private Limelight(){
+    public Limelight(){
         this.instantReset = false;
 
     }
@@ -38,6 +41,8 @@ public class Limelight implements Mechanism {
 
         }
     }
+
+
 
 
 

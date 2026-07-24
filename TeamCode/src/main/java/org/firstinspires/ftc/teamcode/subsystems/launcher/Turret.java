@@ -6,7 +6,6 @@ import com.pedropathing.geometry.Pose;
 import org.firstinspires.ftc.teamcode.util.MyMath;
 import org.firstinspires.ftc.teamcode.util.SavedData;
 
-import dev.nextftc.hardware.RobotController;
 import dev.nextftc.hardware.actuators.NextServo;
 import dev.nextftc.robot.Mechanism;
 
@@ -37,17 +36,16 @@ public class Turret implements Mechanism {
     private Pose lastKnownPose = new Pose(0, 0, 0);
 
     //Red pose values
-
     public Pose exactGoal = new Pose(144, 144);
     public Pose goal = new Pose(144,144);
-    public static Pose resetPose = new Pose(8.3,7.8,Math.toRadians(180));
+    public Pose resetPose = new Pose(8.3,7.8,Math.toRadians(180));
     private final double linearFactor = (1.0 +2.0/90.0);
 
     private double turretAngleToServo(double angle){
         return (-angle * linearFactor ) * (GEAR_RATIO / SERVO_RANGE) + 0.50 ; //
     }
 
-    public void setPose(SavedData.Alliance alliance) {
+    public void setAlliance(SavedData.Alliance alliance) {
         if (alliance == SavedData.Alliance.RED) {
             goal = new Pose(142.62, 141.88);
             exactGoal = new Pose(144, 144);

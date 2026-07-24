@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.LauncherHood;
+import org.firstinspires.ftc.teamcode.subsystems.Limelight;
 import org.firstinspires.ftc.teamcode.subsystems.Tilt;
 import org.firstinspires.ftc.teamcode.subsystems.intakeSpindex.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.intakeSpindex.IntakeSpindexerGroup;
@@ -32,6 +33,8 @@ public class HazmatRobot implements NextRobot {
     public final LauncherHood hood = new LauncherHood();
     public final LauncherGroup launchGroup = new LauncherGroup(launcher, hood, turret);
     public final Tilt tilt = new Tilt();
+    public final Limelight limelight = new Limelight();
+
 
     private boolean autoStart = true;
     private boolean launcherAutomation = false;
@@ -90,7 +93,7 @@ public class HazmatRobot implements NextRobot {
     }
     @Override
     public Set<Mechanism> getMechanisms() {
-        return Set.of(intake, spindexer, sensors, intakeGroup, launcher, turret);
+        return Set.of(intake, spindexer, sensors, intakeGroup, launcher, turret, limelight );
     }
 
     @Override
